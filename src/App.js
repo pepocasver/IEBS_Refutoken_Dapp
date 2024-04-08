@@ -18,9 +18,9 @@ import MyBalancePage from './Pages/MyBalancePage';
 //const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 //const web3 = createAlchemyWeb3(alchemyKey);
 
-
 //const CONTRACT_ADDRESS = "0xC44F32496471de15A5fF444eD312500615Fd8e78" //Ganache
-const CONTRACT_ADDRESS = "0xB85CD5E461e7D79304BC4aB41D9474C1DFFCb872" //Sepolia
+const CONTRACT_ADDRESS = "0x73806ecF5ee54a1979a20c470f88743B74De9B72" 
+//const CONTRACT_ADDRESS = "0x84D364f562aD8cB2aE22486e44E38dA9332144E7" //Sepolia
 const CONTRACT_ABI = require("./contracts/RefuToken.json").abi
 
 class App extends Component {
@@ -31,7 +31,7 @@ class App extends Component {
        accounts: null, 
        contract: null,
        tokenPrice: 0, 
-       isStopped: 'Y',
+       isStopped: false,
        BuytokenAmount: null,
        setBuyEthAmount: null,
        setTransactionStatus: null,
@@ -46,7 +46,7 @@ class App extends Component {
   }   
   
   componentDidMount = async () => {
-   // try {
+    try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
@@ -72,13 +72,13 @@ class App extends Component {
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, networkId, contract: instance });
 
-   /*/ } catch (error) {
+    } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
       );
       console.error(error);
-    }*/
+    }
   };
 
   componentDidUpdate() {
@@ -297,10 +297,23 @@ class App extends Component {
      
    
     // Update state with the result.
-    if(!isStopped)
-    this.setState({ isStopped: false });
+    if(isStopped)
+    this.setState({ isStopped: 'Stopped' });
   }
- 
+
+  
+// REstart Service form  Stop  FUNCTION
+  startService = async () => {
+    const { contract } = this.state;
+
+      // Get the new values: isActive and newOwner
+    const isStopped =  await contract.methods.emergencyStop(false).call();
+    console.log(isStopped);
+    
+    // Update state with the result.
+    if(!isStopped)
+    this.setState({ isStopped: 'Started' });
+  } 
   render() {
 
     if (!this.state.web3) {
@@ -419,9 +432,11 @@ class App extends Component {
               { this.state.AssetFractBalance != null && <p>Your Refutoken balance lent to Apartment <b>{this.state.AssetNum}</b> is: <b>{this.state.AssetFractBalance}</b></p>}
       
 
-            {/* Button to stop refutoken 
+            {/* Button to stop refutoken  */}
+            <h3>Emergency Stop</h3> 
             <button id="button-send" onClick={this.emergencyStop}>STOP REFU</button>
-            {<p><b>Status:</b> {this.state.isStopped}</p> } */}
+            <button id="button-send" onClick={this.startService}>START REFU</button>
+            {<p><b>Status:</b> {this.state.isStopped}</p> }
 
             {/* Helper to convert wei to ether - {this.state.web3.utils.toWei(this.state.value / this.state.tokenPrice, 'ether') */}
         
