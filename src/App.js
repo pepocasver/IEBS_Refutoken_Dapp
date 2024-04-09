@@ -19,8 +19,8 @@ import MyBalancePage from './Pages/MyBalancePage';
 //const web3 = createAlchemyWeb3(alchemyKey);
 
 //const CONTRACT_ADDRESS = "0xC44F32496471de15A5fF444eD312500615Fd8e78" //Ganache
-const CONTRACT_ADDRESS = "0x73806ecF5ee54a1979a20c470f88743B74De9B72" 
-//const CONTRACT_ADDRESS = "0x84D364f562aD8cB2aE22486e44E38dA9332144E7" //Sepolia
+//const CONTRACT_ADDRESS = "0x73806ecF5ee54a1979a20c470f88743B74De9B72" 
+const CONTRACT_ADDRESS = "0x84D364f562aD8cB2aE22486e44E38dA9332144E7" //Sepolia
 const CONTRACT_ABI = require("./contracts/RefuToken.json").abi
 
 class App extends Component {
@@ -438,8 +438,10 @@ class App extends Component {
             <button id="button-send" onClick={this.startService}>START REFU</button>
             {<p><b>Status:</b> {this.state.isStopped}</p> }
 
+
             {/* Helper to convert wei to ether - {this.state.web3.utils.toWei(this.state.value / this.state.tokenPrice, 'ether') */}
-        
+        {/* Botón adicional "Go to Dapp" */}
+        <a href="http://www.ecode.es/" target="_blank" rel="noopener noreferrer" className='dapp-button'>Go to Dapp</a>
           
           </div>
 
